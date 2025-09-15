@@ -50,7 +50,7 @@ async def root():
 async def get_personagens():
     return personagens
 
-# GET - Personagem pelo ID
+# GET - Pesquisa de personagem pelo ID
 @app.get("/personagens/{personagem_id}")
 async def get_personagem(personagem_id: int):
     try: 
@@ -69,9 +69,9 @@ async def post_personagens(personagem: PersonagensUrsinhoPooh):
     del personagem.id
     return personagem
 
-# PUT
+# PUT - Atualização dos personagens por ID
 @app.put("/personagens/{personagem_id}", status_code=status.HTTP_202_ACCEPTED)
-async def put_personagenm(personagem_id: int, personagem: PersonagensUrsinhoPooh):
+async def put_personagem(personagem_id: int, personagem: PersonagensUrsinhoPooh):
     if personagem_id in personagens:
         personagens[personagem_id] = personagem
         personagem.id = personagem_id
@@ -80,6 +80,19 @@ async def put_personagenm(personagem_id: int, personagem: PersonagensUrsinhoPooh
     else:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail="Personagem não encontrado")
+
+# DELETE - Deletar personagem por ID
+@app.delete("/personagens/{personagem_id}", status_code=status.HTTP_202_ACCEPTED)
+async def del_personagem(personagem_id: int, personagem: PersonagensUrsinhoPooh):
+    if personagem_id in personagens:
+        del personagens[personagem_id]
+        return {"message" : "O personagem foi apagado"}
+    else:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail="Personagem não encontrado")
+    
+# PATCH - Atualizar itens especificos do personagem
+
 
 # SETUP Main
 if __name__ == "__main__":
